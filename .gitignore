@@ -1,0 +1,93 @@
+# ──────────────────────────────────────────────
+# Python
+# ──────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# ──────────────────────────────────────────────
+# Ambiente virtual
+# ──────────────────────────────────────────────
+.venv/
+venv/
+env/
+.python-version
+
+# ──────────────────────────────────────────────
+# Variáveis de ambiente
+# ──────────────────────────────────────────────
+.env
+.env.local
+
+# ──────────────────────────────────────────────
+# Testes e cobertura
+# ──────────────────────────────────────────────
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+.tox/
+
+# ──────────────────────────────────────────────
+# Jupyter
+# ──────────────────────────────────────────────
+.ipynb_checkpoints/
+notebooks/_scratch/
+
+# ──────────────────────────────────────────────
+# IDEs
+# ──────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ──────────────────────────────────────────────
+# Sistema operacional
+# ──────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ──────────────────────────────────────────────
+# Dados pesados e modelos (gerencie com DVC)
+# ──────────────────────────────────────────────
+data/raw/*
+data/interim/*
+data/processed/*
+data/external/*
+!data/**/README.md
+!data/**/.gitkeep
+
+models/**/*.pt
+models/**/*.pth
+models/**/*.pkl
+models/**/*.onnx
+!models/**/README.md
+!models/**/.gitkeep
+
+# ──────────────────────────────────────────────
+# Reports gerados
+# ──────────────────────────────────────────────
+reports/figures/*.png
+reports/figures/*.svg
+reports/figures/*.pdf
+!reports/figures/.gitkeep
+
+# ──────────────────────────────────────────────
+# Lockfiles temporários
+# ──────────────────────────────────────────────
+requirements.lock
+
+# ──────────────────────────────────────────────
+# Ferramentas de qualidade
+# ──────────────────────────────────────────────
+.ruff_cache/
+.mypy_cache/

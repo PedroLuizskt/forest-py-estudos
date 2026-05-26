@@ -7,6 +7,11 @@ Submódulos:
     hipsometria  — Curtis, Stoffels, Henricksen, Trorey
     sortimentos  — Algoritmos de toragem
 """
+from forestpy.dendrometria.fitting import (
+    FitResult,
+    compare_models,
+    fit_model,
+)
 from forestpy.dendrometria.hipsometria import (
     curtis,
     henricksen,
@@ -29,4 +34,8 @@ __all__ = [
     "stoffels",
     "henricksen",
     "trorey",
+    # Ajuste
+    "fit_model",
+    "compare_models",
+    "FitResult",
 ]

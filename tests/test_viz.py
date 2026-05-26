@@ -62,3 +62,30 @@ class TestDiagnostics:
         assert isinstance(fig, plt.Figure)
         assert len(fig.axes) == 4  # painel 2x2
         plt.close(fig)
+
+
+class TestTrees:
+    def test_hypsometric_curves_retorna_figure(self, synthetic_pef):
+        from forestpy.dendrometria.hipsometria import curtis, stoffels
+        from forestpy.viz.trees import plot_hypsometric_curves
+
+        models = {"Curtis": curtis, "Stoffels": stoffels}
+        fig = plot_hypsometric_curves(synthetic_pef, models)
+        assert isinstance(fig, plt.Figure)
+        plt.close(fig)
+
+    def test_scatter_relationship_sem_hue(self, synthetic_pef):
+        from forestpy.viz.trees import plot_scatter_relationship
+
+        fig = plot_scatter_relationship(synthetic_pef, x_col="dap", y_col="h")
+        assert isinstance(fig, plt.Figure)
+        plt.close(fig)
+
+    def test_scatter_relationship_com_hue(self, synthetic_pef):
+        from forestpy.viz.trees import plot_scatter_relationship
+
+        fig = plot_scatter_relationship(
+            synthetic_pef, x_col="dap", y_col="volume", hue_col="classe"
+        )
+        assert isinstance(fig, plt.Figure)
+        plt.close(fig)

@@ -14,8 +14,15 @@ class TestLoadPefVinhedo:
 
     def test_synthetic_tem_colunas_esperadas(self):
         df = load_pef_vinhedo(synthetic_fallback=True, n_synthetic=50)
-        esperadas = {"parcela", "arvore", "especie", "dap", "h", "h_com", "idade", "classe"}
+        esperadas = {
+            "parcela", "arvore", "especie", "dap", "h",
+            "h_com", "idade", "classe", "volume",
+        }
         assert esperadas.issubset(df.columns)
+
+    def test_synthetic_volume_positivo(self):
+        df = load_pef_vinhedo(synthetic_fallback=True, n_synthetic=200)
+        assert (df["volume"] > 0).all()
 
     def test_synthetic_valores_positivos(self):
         df = load_pef_vinhedo(synthetic_fallback=True, n_synthetic=200)

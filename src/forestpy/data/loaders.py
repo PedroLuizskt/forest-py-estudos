@@ -36,6 +36,7 @@ def load_pef_vinhedo(
         - h_com      : Altura comercial (m)
         - idade      : Idade do plantio (anos)
         - classe     : Classe de qualidade ('I', 'II', 'III')
+        - volume     : Volume individual estimado (m³), com ruído de medição
 
     Args:
         path: Caminho para o CSV oficial. Se None, busca em `data/raw/pef_vinhedo.csv`.
@@ -99,6 +100,14 @@ def _generate_synthetic_pef(n: int = 500, seed: int = 42) -> pd.DataFrame:
     q33, q66 = np.quantile(rhd, [0.33, 0.66])
     classe = np.where(rhd >= q66, "I", np.where(rhd >= q33, "II", "III"))
 
+    # ── Volume real (Schumacher-Hall) + ruído de medição ──
+    # Importação local evita dependência circular no import do pacote
+    from forestpy.dendrometria.volume import schumacher_hall
+
+    volume_teorico = schumacher_hall(dap, h)
+    ruido_vol = rng.normal(1.0, 0.05, size=n)  # ±5% de erro de medição
+    volume = volume_teorico * ruido_vol
+
     # ── Parcelas e árvores ──
     parcelas = rng.integers(1, 11, size=n)  # 10 parcelas
     arvores = np.arange(1, n + 1)
@@ -113,5 +122,6 @@ def _generate_synthetic_pef(n: int = 500, seed: int = 42) -> pd.DataFrame:
             "h_com": np.round(h_com, 2),
             "idade": idade,
             "classe": classe,
+            "volume": np.round(volume, 4),
         }
     )

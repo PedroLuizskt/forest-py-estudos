@@ -2,10 +2,56 @@
 
 from __future__ import annotations
 
+from collections.abc import Sequence
+
 import matplotlib.pyplot as plt
 import numpy as np
 from numpy.typing import ArrayLike
 from scipy import stats
+
+
+def plot_learning_curve(
+    train_loss: Sequence[float],
+    val_loss: Sequence[float],
+    best_epoch: int | None = None,
+    title: str = "Curva de Aprendizado",
+    log_scale: bool = True,
+) -> plt.Figure:
+    """
+    Curvas de loss de treino e validação por época.
+
+    Diagnóstico essencial para detectar overfitting: quando a loss de treino
+    continua caindo mas a de validação sobe, o modelo está memorizando os
+    dados em vez de generalizar.
+
+    Args:
+        train_loss: Loss de treino por época.
+        val_loss: Loss de validação por época.
+        best_epoch: Época do melhor modelo (marca verticalmente).
+        title: Título.
+        log_scale: Se True, eixo Y em escala log (típico para losses).
+
+    Returns:
+        Figura matplotlib.
+    """
+    fig, ax = plt.subplots(figsize=(10, 5))
+
+    epocas = range(1, len(train_loss) + 1)
+    ax.plot(epocas, train_loss, label="Treino", lw=2, color="#2d5016")
+    ax.plot(epocas, val_loss, label="Validação", lw=2, color="#a04a2c")
+
+    if best_epoch is not None:
+        ax.axvline(best_epoch, ls="--", color="gray", alpha=0.7,
+                   label=f"Melhor época ({best_epoch})")
+
+    ax.set_xlabel("Época")
+    ax.set_ylabel("Loss (MSE)")
+    ax.set_title(title, fontweight="bold")
+    if log_scale:
+        ax.set_yscale("log")
+    ax.legend()
+    fig.tight_layout()
+    return fig
 
 
 def plot_predicted_vs_observed(

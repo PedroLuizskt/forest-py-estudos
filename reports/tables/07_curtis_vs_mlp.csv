@@ -1,0 +1,3 @@
+Modelo,Features,RMSE médio,R² médio,MAPE médio (%)
+Curtis (só DAP),1,3.961,0.5305,24.4713
+MLP (DAP+idade+classe),5,1.7823,0.9035,10.5796

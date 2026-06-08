@@ -126,6 +126,101 @@ def accuracy(y_true: ArrayLike, y_pred: ArrayLike) -> float:
     return float(np.mean(yt == yp))
 
 
+def confusion_matrix(
+    y_true: ArrayLike,
+    y_pred: ArrayLike,
+    labels: list | None = None,
+) -> np.ndarray:
+    """
+    Constrói a matriz de confusão.
+
+    Convenção: linhas = classe real, colunas = classe predita.
+
+    Args:
+        y_true: Rótulos observados.
+        y_pred: Rótulos preditos.
+        labels: Ordem das classes na matriz. Se None, infere de `y_true ∪ y_pred`.
+
+    Returns:
+        Matriz quadrada de inteiros (n_classes × n_classes).
+
+    Example:
+        >>> cm = confusion_matrix([0, 1, 2, 0, 1], [0, 2, 2, 0, 1], labels=[0, 1, 2])
+        >>> cm[0, 0]  # acertos da classe 0
+        2
+    """
+    yt = np.asarray(y_true).ravel()
+    yp = np.asarray(y_pred).ravel()
+
+    if labels is None:
+        labels = sorted(set(yt.tolist()) | set(yp.tolist()))
+
+    label_to_idx = {lab: i for i, lab in enumerate(labels)}
+    n = len(labels)
+    cm = np.zeros((n, n), dtype=int)
+
+    for yt_i, yp_i in zip(yt, yp, strict=False):
+        if yt_i in label_to_idx and yp_i in label_to_idx:
+            cm[label_to_idx[yt_i], label_to_idx[yp_i]] += 1
+
+    return cm
+
+
+def precision_per_class(y_true: ArrayLike, y_pred: ArrayLike,
+                        labels: list | None = None) -> np.ndarray:
+    """
+    Precision por classe: TP / (TP + FP).
+
+    De todas as predições da classe k, quantas estavam corretas?
+    """
+    cm = confusion_matrix(y_true, y_pred, labels=labels)
+    soma_col = cm.sum(axis=0)
+    # Evita divisão por zero: classes nunca preditas → precision = 0
+    return np.where(soma_col > 0, np.diag(cm) / np.maximum(soma_col, 1), 0.0)
+
+
+def recall_per_class(y_true: ArrayLike, y_pred: ArrayLike,
+                     labels: list | None = None) -> np.ndarray:
+    """
+    Recall por classe: TP / (TP + FN).
+
+    De todas as instâncias reais da classe k, quantas foram capturadas?
+    """
+    cm = confusion_matrix(y_true, y_pred, labels=labels)
+    soma_linha = cm.sum(axis=1)
+    return np.where(soma_linha > 0, np.diag(cm) / np.maximum(soma_linha, 1), 0.0)
+
+
+def f1_per_class(y_true: ArrayLike, y_pred: ArrayLike,
+                 labels: list | None = None) -> np.ndarray:
+    """F1 por classe: média harmônica de precision e recall."""
+    p = precision_per_class(y_true, y_pred, labels=labels)
+    r = recall_per_class(y_true, y_pred, labels=labels)
+    denom = p + r
+    return np.where(denom > 0, 2 * p * r / np.maximum(denom, 1e-12), 0.0)
+
+
+def classification_report(
+    y_true: ArrayLike,
+    y_pred: ArrayLike,
+    labels: list | None = None,
+) -> dict[str, float]:
+    """
+    Conjunto-padrão de métricas de classificação.
+
+    Returns:
+        Dict com `accuracy`, `precision_macro`, `recall_macro`, `f1_macro`.
+        Macro = média não-ponderada entre classes (trata classes minoritárias
+        com o mesmo peso que majoritárias).
+    """
+    return {
+        "accuracy": accuracy(y_true, y_pred),
+        "precision_macro": float(np.mean(precision_per_class(y_true, y_pred, labels))),
+        "recall_macro": float(np.mean(recall_per_class(y_true, y_pred, labels))),
+        "f1_macro": float(np.mean(f1_per_class(y_true, y_pred, labels))),
+    }
+
+
 def regression_report(y_true: ArrayLike, y_pred: ArrayLike) -> dict[str, float]:
     """
     Calcula o conjunto-padrão de métricas de regressão de uma vez.

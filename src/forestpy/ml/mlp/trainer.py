@@ -111,7 +111,11 @@ class MLPTrainer:
     ) -> DataLoader:
         """Cria um DataLoader a partir de arrays NumPy."""
         X_t = torch.tensor(X, dtype=torch.float32)
-        y_t = torch.tensor(y, dtype=torch.float32).reshape(-1, 1)
+        y_t = torch.tensor(y, dtype=torch.float32)
+        # Para alvos univariados (vetor 1D), reformata para coluna (n, 1).
+        # Para alvos multi-output (matriz 2D), mantém o shape original.
+        if y_t.ndim == 1:
+            y_t = y_t.reshape(-1, 1)
         dataset = TensorDataset(X_t, y_t)
         return DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
 
@@ -219,9 +223,18 @@ class MLPTrainer:
         return self.history
 
     @torch.no_grad()
+    @torch.no_grad()
     def predict(self, X: np.ndarray) -> np.ndarray:
-        """Gera predições para um conjunto X. Retorna array 1D."""
+        """
+        Gera predições para um conjunto X.
+
+        Retorna array 1D para modelos com saída única (regressão univariada),
+        ou 2D para saída multi-dimensional (ex.: distribuição diamétrica).
+        """
         self.model.eval()
         X_t = torch.tensor(X, dtype=torch.float32).to(self.device)
-        y_pred = self.model(X_t).cpu().numpy().ravel()
+        y_pred = self.model(X_t).cpu().numpy()
+        # Achata para 1D se for saída de 1 dimensão (univariada)
+        if y_pred.ndim == 2 and y_pred.shape[1] == 1:
+            y_pred = y_pred.ravel()
         return y_pred

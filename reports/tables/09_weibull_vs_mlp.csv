@@ -1,0 +1,3 @@
+Modelo,RMSE proporções,Parâmetros,Treino
+Weibull (prognose por momentos),0.06115,"2 (β, α)",estatístico
+MLP multi-output,0.08213,~700,Leave-One-Out (29 amostras)

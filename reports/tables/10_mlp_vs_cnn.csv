@@ -1,0 +1,3 @@
+Modelo,Parâmetros,Entrada,accuracy,precision_macro,recall_macro,f1_macro
+MLP em features manuais,948,10 features estatísticas,1.0,1.0,1.0,1.0
+CNN end-to-end,89812,chip 4×32×32 cru,1.0,1.0,1.0,1.0

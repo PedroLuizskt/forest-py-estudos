@@ -1,0 +1,3 @@
+Modelo,Parâmetros,Usa contexto espacial?,iou,dice,pixel_acc
+Threshold de NDVI,1,Não,0.1882,0.3168,0.8734
+U-Net,117825,Sim,0.8951,0.9446,0.9932

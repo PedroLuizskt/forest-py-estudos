@@ -235,3 +235,115 @@ def regression_report(y_true: ArrayLike, y_pred: ArrayLike) -> dict[str, float]:
         "r2": r2(y_true, y_pred),
         "bias": bias(y_true, y_pred),
     }
+
+
+# ──────────────────────────────────────────────────────────────
+# Métricas de segmentação semântica binária
+# ──────────────────────────────────────────────────────────────
+def iou_score(
+    y_true: ArrayLike,
+    y_pred: ArrayLike,
+    eps: float = 1e-7,
+) -> float:
+    """
+    Intersection over Union (Jaccard) para segmentação binária.
+
+    Definição:
+        IoU = |A ∩ B| / |A ∪ B|
+
+    Mede a sobreposição entre as máscaras predita e observada.
+    Robusto a desbalanço de classes (não é dominado pelo fundo, ao
+    contrário da acurácia pixel-a-pixel).
+
+    Args:
+        y_true: Máscara binária observada.
+        y_pred: Máscara binária predita (mesmo shape).
+        eps: Estabilizador numérico para máscaras vazias.
+
+    Returns:
+        IoU em [0, 1]. 1.0 = sobreposição perfeita.
+
+    Example:
+        >>> import numpy as np
+        >>> yt = np.array([[1, 1, 0], [1, 0, 0]])
+        >>> yp = np.array([[1, 0, 0], [1, 0, 0]])
+        >>> round(iou_score(yt, yp), 4)
+        0.6667
+    """
+    yt = np.asarray(y_true).astype(bool).ravel()
+    yp = np.asarray(y_pred).astype(bool).ravel()
+    if yt.shape != yp.shape:
+        raise ValueError(f"Shapes incompatíveis: y_true{yt.shape} vs y_pred{yp.shape}")
+    intersection = float(np.logical_and(yt, yp).sum())
+    union = float(np.logical_or(yt, yp).sum())
+    return (intersection + eps) / (union + eps)
+
+
+def dice_score(
+    y_true: ArrayLike,
+    y_pred: ArrayLike,
+    eps: float = 1e-7,
+) -> float:
+    """
+    Coeficiente de Dice (F1 pixel-a-pixel) para segmentação binária.
+
+    Definição:
+        Dice = 2|A ∩ B| / (|A| + |B|) = 2·TP / (2·TP + FP + FN)
+
+    Equivalente ao F1-score aplicado pixel-a-pixel. Penaliza menos erros
+    de fronteira do que IoU (Dice ≥ IoU para a mesma predição).
+
+    Args:
+        y_true: Máscara binária observada.
+        y_pred: Máscara binária predita.
+        eps: Estabilizador numérico.
+
+    Returns:
+        Dice em [0, 1]. 1.0 = sobreposição perfeita.
+
+    Example:
+        >>> import numpy as np
+        >>> yt = np.array([[1, 1, 0], [1, 0, 0]])
+        >>> yp = np.array([[1, 0, 0], [1, 0, 0]])
+        >>> round(dice_score(yt, yp), 4)
+        0.8
+    """
+    yt = np.asarray(y_true).astype(bool).ravel()
+    yp = np.asarray(y_pred).astype(bool).ravel()
+    if yt.shape != yp.shape:
+        raise ValueError(f"Shapes incompatíveis: y_true{yt.shape} vs y_pred{yp.shape}")
+    intersection = float(np.logical_and(yt, yp).sum())
+    return (2 * intersection + eps) / (yt.sum() + yp.sum() + eps)
+
+
+def pixel_accuracy(y_true: ArrayLike, y_pred: ArrayLike) -> float:
+    """
+    Acurácia pixel-a-pixel: fração de pixels classificados corretamente.
+
+    ATENÇÃO: em segmentação com classes desbalanceadas (ex.: copas
+    ocupam ~7% dos pixels), esta métrica é enganosa — um modelo que
+    sempre prediz "fundo" obtém ~93% de acurácia sem detectar nada.
+    Sempre reporte em conjunto com IoU ou Dice.
+    """
+    yt = np.asarray(y_true).astype(bool).ravel()
+    yp = np.asarray(y_pred).astype(bool).ravel()
+    if yt.shape != yp.shape:
+        raise ValueError(f"Shapes incompatíveis: y_true{yt.shape} vs y_pred{yp.shape}")
+    return float((yt == yp).mean())
+
+
+def segmentation_report(
+    y_true: ArrayLike,
+    y_pred: ArrayLike,
+) -> dict[str, float]:
+    """
+    Conjunto-padrão de métricas para segmentação binária.
+
+    Returns:
+        Dict com IoU, Dice e pixel accuracy.
+    """
+    return {
+        "iou": iou_score(y_true, y_pred),
+        "dice": dice_score(y_true, y_pred),
+        "pixel_acc": pixel_accuracy(y_true, y_pred),
+    }

@@ -1,0 +1,7 @@
+Sessão,Tarefa,Vencedor,Ganho relativo (%),Razão
+06,Volumetria,Clássico,-119.7,Forma funcional correta
+07,Hipsometria,ML,53.3,Mais features capturam variância
+08,Classificação tabular,Empate,0.0,DL não domina tabular moderado
+09,Distribuição diamétrica,Clássico,-34.2,Forma adequada + escassez de dados
+10,Classificação remota,Clássico,-4.2,Features bem-engenheiradas
+11,Segmentação de copas,ML,400.0,Saída espacial densa (estrutural)

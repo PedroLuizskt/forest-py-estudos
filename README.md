@@ -5,7 +5,8 @@
 [![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python&logoColor=white)](https://www.python.org)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.x-ee4c2c?logo=pytorch&logoColor=white)](https://pytorch.org)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-197%20passing-success)](tests/)
+[![Tests](https://img.shields.io/badge/tests-223%20passing-success)](tests/)
+[![Sessions](https://img.shields.io/badge/sessions-12%2F12%20complete-success)](notebooks/)
 [![Code style](https://img.shields.io/badge/code%20style-ruff-261230)](https://github.com/astral-sh/ruff)
 
 ---
@@ -13,10 +14,11 @@
 ## Sumário
 
 - [Resumo](#resumo)
+- [Tese Central](#tese-central)
 - [Motivação e Inspiração](#motivação-e-inspiração)
 - [Diferenciais Metodológicos](#diferenciais-metodológicos)
 - [Arquitetura do Projeto](#arquitetura-do-projeto)
-- [Plano de Estudos e Estado Atual](#plano-de-estudos-e-estado-atual)
+- [Trilha Didática Completa](#trilha-didática-completa)
 - [Resultados Consolidados](#resultados-consolidados)
 - [Requisitos e Instalação](#requisitos-e-instalação)
 - [Utilização](#utilização)
@@ -31,9 +33,17 @@
 
 ## Resumo
 
-Este repositório consolida um estudo aplicado de **Machine Learning e Deep Learning** ao domínio da **Engenharia Florestal**, com ênfase em mensuração florestal, inventário, classificação de sítio, distribuição diamétrica e análises geoespaciais. O material é estruturado como um pacote Python instalável (`forestpy`), acompanhado de doze sessões didáticas em formato de notebook que documentam o raciocínio metodológico, desde a análise exploratória até a modelagem com redes neurais densas (MLP) e convolucionais (CNN).
+Este repositório consolida um estudo aplicado de **Machine Learning e Deep Learning** ao domínio da **Engenharia Florestal**, com ênfase em mensuração florestal, inventário, classificação de sítio, distribuição diamétrica e análises geoespaciais (incluindo segmentação semântica). O material é estruturado como um pacote Python instalável (`forestpy`), acompanhado de **doze sessões didáticas** completas em formato de notebook que documentam o raciocínio metodológico desde a análise exploratória até a modelagem com redes neurais densas (MLP) e convolucionais (CNN, U-Net).
 
-O dataset principal é uma base sintética com distribuições estatísticas realistas de plantios de *Eucalyptus grandis*, compatível com o formato do dataset PEF Vinhedo (SP). A escolha por dados sintéticos garante reprodutibilidade total, independência de fontes externas e controle sobre os mecanismos geradores — permitindo investigar empiricamente em quais regimes os modelos paramétricos clássicos superam o aprendizado de máquina, e vice-versa, sem comprometer a validade metodológica das análises.
+Os datasets são sintéticos e reproduzíveis, com distribuições estatísticas realistas de plantios de *Eucalyptus grandis*. A escolha por dados sintéticos garante reprodutibilidade total, independência de fontes externas e — principalmente — **controle sobre os mecanismos geradores**, permitindo investigar empiricamente em quais regimes os modelos paramétricos clássicos superam o aprendizado de máquina, e vice-versa, sem comprometer a validade metodológica das análises.
+
+## Tese Central
+
+A investigação conduzida ao longo das doze sessões resultou em uma tese metodológica clara, sustentada por seis experimentos comparativos rigorosos:
+
+> **Não existe paradigma universalmente superior em ciência de dados aplicada. Cada um vence em um regime estrutural específico, identificável a priori por características do problema (forma funcional, tamanho amostral, riqueza de features, dimensionalidade da saída). O profissional sênior diagnostica esse regime antes de escolher a ferramenta.**
+
+Esta tese é demonstrada empiricamente — não apenas afirmada — através de comparações estatisticamente fundamentadas com validação cruzada e intervalos de confiança bootstrap em cada sessão.
 
 ## Motivação e Inspiração
 
@@ -41,19 +51,19 @@ O projeto tem como inspiração direta o pacote [`fptools`](https://github.com/R
 
 A presente obra propõe-se a **estender** o escopo daquele material em três frentes:
 
-1. **Modelagem com Redes Neurais.** Implementação sistemática de arquiteturas MLP e CNN em PyTorch para tarefas tradicionalmente abordadas por regressão paramétrica, com **comparação rigorosa e estatisticamente fundamentada** contra os modelos clássicos.
+1. **Modelagem com Redes Neurais.** Implementação sistemática de arquiteturas MLP, CNN e U-Net em PyTorch para tarefas tradicionalmente abordadas por regressão paramétrica, com **comparação rigorosa e estatisticamente fundamentada** contra os modelos clássicos.
 2. **Diagnóstico metodológico explícito.** Cada sessão documenta não apenas o desempenho dos modelos, mas também as razões pelas quais um paradigma supera o outro em cada regime experimental (forma funcional, escassez de dados, riqueza de features, estrutura espacial).
-3. **Análises gráficas robustas.** Inclusão de painéis de diagnóstico (resíduos, QQ-plots, curvas de aprendizado, matrizes de confusão, intervalos de confiança bootstrap) e visualizações geoespaciais aprofundadas.
+3. **Análises gráficas e estatísticas robustas.** Inclusão de painéis de diagnóstico (resíduos, QQ-plots, curvas de aprendizado, matrizes de confusão, intervalos de confiança bootstrap, métricas de segmentação IoU/Dice) e visualizações geoespaciais aprofundadas.
 
 ## Diferenciais Metodológicos
 
 | Aspecto | Abordagem |
 |---|---|
 | Reprodutibilidade | Seeds determinísticas, configurações YAML versionadas, ambiente isolado via `pyproject.toml` |
-| Validação | Suíte de **197 testes automatizados** com pytest, cobertura monitorada |
+| Validação | Suíte de **223 testes automatizados** com pytest, cobertura monitorada |
 | Engenharia de software | Estrutura `src/`-layout, linting com Ruff, formatação com Black, pre-commit hooks |
 | Avaliação estatística | Validação cruzada k-fold + bootstrap para intervalos de confiança em todas as comparações |
-| Honestidade científica | Resultados reportados independentemente do resultado favorável; análise das causas de vitória/derrota do ML em cada regime |
+| Honestidade científica | Resultados reportados independentemente do paradigma favorecido; análise das causas de vitória/derrota do ML em cada regime |
 | Documentação | Docstrings completas (estilo Google), referências bibliográficas inline, exemplos doctest |
 
 ## Arquitetura do Projeto
@@ -61,46 +71,52 @@ A presente obra propõe-se a **estender** o escopo daquele material em três fre
 ```
 forest-py-estudos/
 ├── src/forestpy/             Pacote Python instalável
-│   ├── data/                 Loaders, validadores, geradores de dados e chips raster
-│   ├── dendrometria/         Volume, hipsometria, ajuste de modelos paramétricos
-│   ├── inventario/           Amostragem (AAS, estratificada) e distribuição diamétrica (Weibull)
+│   ├── data/                 Loaders, geradores tabulares e de chips raster
+│   │   ├── loaders.py        Dataset principal (PEF Vinhedo sintético)
+│   │   ├── chips.py          Chips multi-banda para classificação
+│   │   └── canopy_chips.py   Chips com máscaras para segmentação
+│   ├── dendrometria/         Volume, hipsometria, ajuste paramétrico
+│   ├── inventario/           Amostragem (AAS, AE) e distribuição diamétrica (Weibull)
 │   ├── sitio/                Curvas de crescimento e índices de produtividade
-│   ├── ml/                   Métricas, avaliação (CV, bootstrap), MLP e CNN em PyTorch
-│   │   ├── metrics.py        Regressão e classificação
+│   ├── ml/                   Métricas, avaliação, MLP e CNN em PyTorch
+│   │   ├── metrics.py        Regressão, classificação e segmentação (IoU, Dice)
 │   │   ├── evaluation.py     k-fold CV + bootstrap
 │   │   ├── preprocessing.py  Normalização reproduzível
 │   │   ├── encoders.py       One-Hot Encoding
 │   │   ├── mlp/              MLPRegressor, MLPClassifier, trainers
-│   │   └── cnn/              SimpleCNN, CNNTrainer
+│   │   └── cnn/              SimpleCNN, CNNTrainer, UNet, UNetTrainer
 │   ├── viz/                  Toolkit de visualização (matplotlib, seaborn)
+│   │   ├── eda.py, diagnostics.py
+│   │   ├── classification.py
+│   │   └── segmentation.py   Visualizações tríplices chip/observado/predito
 │   └── utils/                Configuração, logging, I/O, reprodutibilidade
-├── notebooks/                12 sessões cronológicas de estudo
+├── notebooks/                12 sessões cronológicas completas
 ├── data/                     raw / interim / processed / external
 ├── models/                   Pesos de modelos treinados
 ├── reports/                  Figuras, tabelas e análises técnicas em Markdown
 ├── configs/                  Hiperparâmetros YAML por experimento
 ├── scripts/                  CLIs reproduzíveis
-└── tests/                    Suíte pytest (197 testes)
+└── tests/                    Suíte pytest (223 testes)
 ```
 
 A separação entre o pacote (`src/forestpy/`) e os notebooks consumidores garante que cada sessão didática utilize as mesmas funções testadas que estariam em produção, evitando a duplicação de código típica de projetos exclusivamente em notebook.
 
-## Plano de Estudos e Estado Atual
+## Trilha Didática Completa
 
-| # | Tema | Métodos Principais | Status |
-|:---:|---|---|:---:|
-| 01 | Introdução aos dados florestais | Contextualização, dicionário de variáveis | ✓ |
-| 02 | Análise exploratória de dados (EDA) | Distribuições, correlações, detecção de outliers | ✓ |
-| 03 | Dendrometria clássica | Ajuste de Schumacher-Hall e Spurr via mínimos quadrados | ✓ |
-| 04 | Inventário e amostragem | Amostragem aleatória simples e estratificada (Cochran 1977) | ✓ |
-| 05 | Volumetria clássica — baseline | Validação cruzada 5-fold e bootstrap para IC | ✓ |
-| 06 | Volumetria com Redes Neurais (MLP) | MLP em PyTorch, comparação estatística com baseline | ✓ |
-| 07 | Hipsometria com Redes Neurais | MLP multi-feature (DAP + idade + classe) | ✓ |
-| 08 | Classificação de sítio via Deep Learning | MLP multiclasse vs Árvore de Decisão vs Majoritário | ✓ |
-| 09 | Distribuição diamétrica: Weibull vs MLP | Modelo paramétrico vs neural multi-output | ✓ |
-| 10 | CNN para sensoriamento remoto | Chips raster 4-bandas, MLP em features vs CNN end-to-end | ✓ |
-| 11 | U-Net para segmentação de copas | Segmentação semântica pixel-a-pixel | em desenvolvimento |
-| 12 | Relatório executivo final | Síntese comparativa de todos os modelos | em desenvolvimento |
+| # | Tema | Métodos Principais |
+|:---:|---|---|
+| 01 | Introdução aos dados florestais | Contextualização, dicionário de variáveis |
+| 02 | Análise exploratória de dados (EDA) | Distribuições, correlações, detecção de outliers |
+| 03 | Dendrometria clássica | Ajuste de Schumacher-Hall e Spurr via mínimos quadrados |
+| 04 | Inventário e amostragem | AAS e AE (Cochran 1977) com FPC e suficiência amostral |
+| 05 | Volumetria clássica — baseline | Validação cruzada 5-fold e bootstrap para IC |
+| 06 | Volumetria com Redes Neurais (MLP) | MLP em PyTorch, comparação estatística com baseline |
+| 07 | Hipsometria com Redes Neurais | MLP multi-feature (DAP + idade + classe) |
+| 08 | Classificação de sítio via Deep Learning | MLP multiclasse vs Árvore vs Majoritário; análise confiança/cobertura |
+| 09 | Distribuição diamétrica: Weibull vs MLP | Modelo paramétrico vs neural multi-output em prognose |
+| 10 | CNN para sensoriamento remoto | Chips raster 4-bandas, MLP em features vs CNN end-to-end |
+| 11 | U-Net para segmentação de copas | Encoder-decoder com skip connections, BCE+Dice loss |
+| 12 | Relatório executivo final | Síntese consolidada, padrões metodológicos, recomendações práticas |
 
 ## Resultados Consolidados
 
@@ -113,8 +129,15 @@ Um dos diferenciais centrais deste projeto é o **diagnóstico metodológico exp
 | 08 | Classificação tabular de sítio | Empate (Árvore ≈ MLP) | Dados tabulares moderados, conforme Shwartz-Ziv & Armon (2022) |
 | 09 | Distribuição diamétrica | Weibull | Forma adequada + escassez de dados (30 parcelas) |
 | 10 | Sensoriamento remoto (chips) | MLP em features manuais | Espectros já discriminam; CNN exige mais dados |
+| 11 | Segmentação semântica | **U-Net** | **Vantagem de +0.72 no IoU** — saída espacial densa é estrutural |
 
-O padrão emergente é coerente com a literatura: **o aprendizado profundo brilha em regimes específicos** — abundância de dados, alta dimensionalidade de entrada, estrutura espacial ou textual rica, e baixa adequação de formas paramétricas conhecidas. Em problemas tabulares com forma funcional bem estabelecida e dados moderados, modelos clássicos frequentemente vencem ou empatam. **Diagnosticar o regime correto é a habilidade central do cientista de dados aplicado.**
+### Padrão observado
+
+Em **três sessões** o paradigma clássico venceu (06, 09, 10) — quando a forma funcional é adequada, dados são escassos ou features bem-engenheiradas. Em **uma sessão** houve empate técnico (08). Em **duas sessões** o ML venceu (07, 11) — quando há mais informação no input ou a saída é espacialmente estruturada.
+
+A magnitude dos ganhos é reveladora: a maior derrota do ML foi na volumetria (-120%), enquanto a maior vitória foi na segmentação (+400%). **As magnitudes refletem a importância do regime estrutural, não da arquitetura.**
+
+> A síntese metodológica está sumarizada em uma frase: *"Modelos paramétricos vencem quando a forma funcional é correta e/ou os dados são escassos; modelos neurais vencem quando há mais informação no input ou a saída é estruturada espacialmente."*
 
 ## Requisitos e Instalação
 
@@ -122,7 +145,7 @@ O padrão emergente é coerente com a literatura: **o aprendizado profundo brilh
 
 - Python **3.12.x**
 - Git
-- (Opcional) GPU com suporte CUDA para acelerar treinamento de CNNs
+- (Opcional) GPU com suporte CUDA para acelerar treinamento de CNNs e U-Net
 
 ### Instalação
 
@@ -138,7 +161,7 @@ python -m venv .venv
 # Instalação em modo editável com dependências de desenvolvimento
 pip install -e ".[dev]"
 
-# PyTorch (CPU)
+# PyTorch (CPU — para GPU, ajuste o índice conforme docs.pytorch.org)
 pip install torch --index-url https://download.pytorch.org/whl/cpu
 
 # Registro do kernel para uso em Jupyter
@@ -149,7 +172,7 @@ python -m ipykernel install --user --name forestpy --display-name "Python (fores
 
 ```bash
 python -c "import forestpy; print(forestpy.__version__)"
-pytest -v --no-cov          # 197 testes, ~10s
+pytest -v --no-cov          # 223 testes, ~10s (sem U-Net) ou ~2min (suite completa)
 ```
 
 ## Utilização
@@ -169,6 +192,7 @@ from forestpy.data.loaders import load_pef_vinhedo
 from forestpy.dendrometria.fitting import fit_model, compare_models
 from forestpy.ml.evaluation import kfold_cv, bootstrap_metric
 from forestpy.ml.mlp import MLPRegressor, MLPTrainer
+from forestpy.ml.cnn import UNet, UNetTrainer
 from forestpy.utils import set_seed
 
 set_seed(42)
@@ -178,11 +202,12 @@ df = load_pef_vinhedo(synthetic_fallback=True)
 resultado = fit_model("schumacher_hall", df["volume"], df["dap"], df["h"])
 print(resultado.summary())
 
-# Comparação entre modelos
-ranking = compare_models(
-    ["schumacher_hall", "spurr"],
-    df["volume"], df["dap"], df["h"],
-)
+# Segmentação com U-Net
+from forestpy.data.canopy_chips import generate_segmentation_chips
+ds = generate_segmentation_chips(n_chips=120, chip_size=64, seed=42)
+model = UNet(in_channels=4, out_channels=1, chip_size=64)
+trainer = UNetTrainer(model, learning_rate=1e-3)
+# trainer.fit(...) — ver notebook 11
 ```
 
 ### Execução via Makefile
@@ -203,19 +228,20 @@ A suíte de testes cobre os módulos críticos do pacote:
 |---|:---:|
 | `data.loaders` | 7 |
 | `data.chips` (sensoriamento remoto) | 13 |
+| `data.canopy_chips` (máscaras para segmentação) | 7 |
 | `dendrometria.volume` | 16 |
 | `dendrometria.hipsometria` | 18 |
 | `dendrometria.fitting` | 10 |
 | `inventario.amostragem` | 19 |
 | `inventario.distribuicao` (Weibull) | 15 |
-| `ml.metrics` (regressão + classificação) | 28 |
+| `ml.metrics` (regressão + classificação + segmentação) | 36 |
 | `ml.evaluation` (k-fold + bootstrap) | 12 |
 | `ml.preprocessing` | 7 |
 | `ml.encoders` | 8 |
 | `ml.mlp` (regressor + classifier) | 19 |
-| `ml.cnn` | 12 |
+| `ml.cnn` (SimpleCNN + U-Net) | 26 |
 | `viz` (style, eda, diagnostics, trees) | 10 |
-| **Total** | **197** |
+| **Total** | **223** |
 
 Padrões adotados:
 
@@ -232,11 +258,13 @@ Para garantir a reprodução fiel dos resultados:
 2. **Configurações de experimentos** ficam armazenadas em `configs/*.yaml` e são referenciadas explicitamente nos *model cards*.
 3. **Dependências travadas** podem ser geradas com `pip freeze > requirements.lock` ao final de cada sessão.
 4. **Dados sintéticos** são gerados com seed controlada, garantindo que qualquer execução produza o mesmo dataset.
-5. **Geradores estruturais** (loaders, chips) são determinísticos por construção e parametrizam explicitamente todas as fontes de aleatoriedade.
+5. **Geradores estruturais** (loaders, chips, canopy_chips) são determinísticos por construção e parametrizam explicitamente todas as fontes de aleatoriedade.
 
 ## Referências
 
 Bailey, R. L., & Dell, T. R. (1973). Quantifying diameter distributions with the Weibull function. *Forest Science*, 19(2), 97–104.
+
+Box, G. E. P. (1976). Science and statistics. *Journal of the American Statistical Association*, 71(356), 791–799.
 
 Campos, J. C. C., & Leite, H. G. (2017). *Mensuração Florestal: Perguntas e Respostas* (5ª ed.). Editora UFV.
 
@@ -256,15 +284,21 @@ Krizhevsky, A., Sutskever, I., & Hinton, G. E. (2012). ImageNet classification w
 
 LeCun, Y., Bottou, L., Bengio, Y., & Haffner, P. (1998). Gradient-based learning applied to document recognition. *Proceedings of the IEEE*, 86(11), 2278–2324.
 
+Milletari, F., Navab, N., & Ahmadi, S.-A. (2016). V-Net: Fully convolutional neural networks for volumetric medical image segmentation. *3D Vision (3DV)*.
+
 Péllico Netto, S., & Brena, D. A. (1997). *Inventário Florestal*. Editora Universitária UFPR.
 
 Richter, V. (2024). *fptools: Forest Python Tools* [Software]. Disponível em: https://github.com/RichterV/fptools
+
+Ronneberger, O., Fischer, P., & Brox, T. (2015). U-Net: Convolutional networks for biomedical image segmentation. *MICCAI*, LNCS 9351, 234–241.
 
 Schumacher, F. X., & Hall, F. S. (1933). Logarithmic expression of timber-tree volume. *Journal of Agricultural Research*, 47(9), 719–734.
 
 Shwartz-Ziv, R., & Armon, A. (2022). Tabular data: Deep learning is not all you need. *Information Fusion*, 81, 84–90.
 
 Spurr, S. H. (1952). *Forest Inventory*. Ronald Press.
+
+Weinstein, B. G., Marconi, S., Bohlman, S., Zare, A., & White, E. (2019). Individual tree-crown detection in RGB imagery using semi-supervised deep learning neural networks. *Remote Sensing*, 11(11), 1309.
 
 ## Citação
 
@@ -294,4 +328,4 @@ Este projeto é distribuído sob a licença MIT. Consulte o arquivo [LICENSE](LI
 
 ---
 
-> *"As coisas só acontecem se os dados que coletamos puderem informar e inspirar aqueles que estão em posição de fazer a diferença."* — Dr. Mike Schmoker
+> *"All models are wrong, but some are useful."* — George Box (1976)

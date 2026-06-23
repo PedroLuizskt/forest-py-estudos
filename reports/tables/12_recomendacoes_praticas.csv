@@ -1,0 +1,9 @@
+Tarefa Florestal,Recomendação Primária,Quando usar ML
+Volumetria por equação alométrica,Schumacher-Hall ou Spurr,"Apenas se houver features além de DAP e H (sítio, idade, manejo)"
+Hipsometria com múltiplas fontes de variação,MLP multi-feature,Padrão; alternativa = modelos hipsométricos segmentados por estrato
+Inventário e amostragem,AAS / AE clássica (Cochran 1977),Não recomendado — estatística inferencial é mais apropriada
+Classificação de sítio,Random Forest / Gradient Boosting,Padrão quando há muitas features mistas; árvore simples basta com poucas features
+Distribuição diamétrica (prognose),Weibull,Apenas com base histórica grande (milhares de parcelas)
+Classificação de uso/cobertura,Random Forest em features espectrais clássicas,CNNs ganham com datasets massivos (>10k chips) e classes visualmente similares
+Segmentação semântica,"U-Net (ou variantes: DeepLab, Mask2Former)",Sempre — não há baseline competitivo
+"Detecção de objetos (copas individuais, talhões)","YOLO, Faster R-CNN ou DeepForest pré-treinada",Sempre — análoga à segmentação
